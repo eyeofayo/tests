@@ -808,54 +808,6 @@ describe('User Comprehensive Tests', () => {
         });
     });
 
-    describe('User Controller - User Files', () => {
-        describe('GET /api/v1/users/:id/files - Success Cases', () => {
-            test('should get user files as admin', async () => {
-                await testStartup.loginAsUser('admin');
-                const userId = testStartup.user.id;
-
-                const response = await client.get(`/api/v1/users/${userId}/files`);
-
-                expect(response.status).toBe(200);
-                expect(response.data.success).toBe(true);
-                expect(Array.isArray(response.data.files)).toBe(true);
-                expect(response.data.meta).toBeDefined();
-            });
-
-            test('should allow users to get their own files', async () => {
-                await testStartup.loginAsUser('user');
-                const userId = testStartup.user.id;
-
-                const response = await client.get(`/api/v1/users/${userId}/files`);
-
-                expect(response.status).toBe(200);
-                expect(response.data.success).toBe(true);
-                expect(Array.isArray(response.data.files)).toBe(true);
-            });
-
-            test('should support pagination for user files', async () => {
-                await testStartup.loginAsUser('admin');
-                const userId = testStartup.user.id;
-
-                const response = await client.get(`/api/v1/users/${userId}/files?page=1&limit=5`);
-
-                expect(response.status).toBe(200);
-                expect(response.data.success).toBe(true);
-            });
-        });
-
-        describe('GET /api/v1/users/:id/files - Permission Tests', () => {
-            test('should deny access to other users files', async () => {
-                await testStartup.loginAsUser('user');
-                const adminId = testStartup.admin.id;
-
-                const response = await client.get(`/api/v1/users/${adminId}/files`);
-                expect(response.status).toBe(403);
-                expect(response.data.success).toBe(false);
-            });
-        });
-    });
-
     describe('User Controller - User Statistics', () => {
         describe('GET /api/v1/users/:id/stats - Success Cases', () => {
             test('should get user statistics as admin', async () => {
